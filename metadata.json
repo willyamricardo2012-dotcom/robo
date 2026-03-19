@@ -1,0 +1,9 @@
+{
+  "name": "Bot.AI Vendas",
+  "description": "Inteligência Artificial avançada para vendas online, marketing digital e automação de renda.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

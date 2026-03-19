@@ -1,0 +1,243 @@
+{
+  "entities": {
+    "Project": {
+      "title": "Project",
+      "description": "A project created by the user (product, sales page, etc.)",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner of the project" },
+        "name": { "type": "string", "description": "Project name" },
+        "type": { "type": "string", "description": "Type of project (e.g., product, page, copy)" },
+        "content": { "type": "string", "description": "The generated content" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "data": { "type": "object", "description": "Additional structured data" }
+      },
+      "required": ["name", "type", "content", "createdAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "A message in the AI chat history",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "model"] },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["role", "text", "timestamp"]
+    },
+    "SellerConfig": {
+      "title": "SellerConfig",
+      "description": "Configuration for the AI Seller Bot",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "productName": { "type": "string" },
+        "productPrice": { "type": "string" },
+        "productLink": { "type": "string" },
+        "productDescription": { "type": "string" },
+        "personality": { "type": "string" },
+        "knowledgeBase": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "isAutoMode": { "type": "boolean" },
+        "followUpSettings": {
+          "type": "object",
+          "properties": {
+            "delay5m": { "type": "boolean" },
+            "delay1h": { "type": "boolean" },
+            "delay24h": { "type": "boolean" }
+          }
+        },
+        "errors": { "type": "array", "items": { "type": "string" } },
+        "lastErrorAt": { "type": "string", "format": "date-time" },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "conversations": { "type": "integer" },
+            "sales": { "type": "integer" },
+            "conversionRate": { "type": "number" }
+          }
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "productName", "productPrice", "productLink", "productDescription", "isActive"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "Logs of bot activity",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["message", "bot_response", "sale_attempt", "error", "follow_up", "payment"] },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "type", "content", "timestamp"]
+    },
+    "Payment": {
+      "title": "Payment",
+      "description": "A payment record (PIX)",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "externalId": { "type": "string", "description": "ID from payment provider" },
+        "amount": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected", "cancelled"] },
+        "qrCode": { "type": "string" },
+        "qrCodeBase64": { "type": "string" },
+        "copyPaste": { "type": "string" },
+        "productName": { "type": "string" },
+        "productLink": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "amount", "status", "createdAt"]
+    },
+    "Subscription": {
+      "title": "Subscription",
+      "description": "User subscription plan",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "plan": { "type": "string", "enum": ["free", "pro"] },
+        "status": { "type": "string", "enum": ["active", "expired", "cancelled"] },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "plan", "status"]
+    },
+    "BotConfig": {
+      "title": "BotConfig",
+      "description": "General bot behavior configuration",
+      "type": "object",
+      "properties": {
+        "status": { "type": "string", "enum": ["on", "off"] },
+        "autoMode": { "type": "boolean" },
+        "sellerMode": { "type": "boolean" },
+        "intensity": { "type": "string", "enum": ["low", "medium", "high"] },
+        "responseTime": { "type": "string", "enum": ["fast", "normal", "slow"] },
+        "welcomeMessage": { "type": "string" },
+        "responseStyle": { "type": "string", "enum": ["friendly", "aggressive", "technical", "humorous"] },
+        "botToken": { "type": "string", "description": "Unique API token for the bot" }
+      },
+      "required": ["status", "autoMode", "sellerMode"]
+    },
+    "Coupon": {
+      "title": "Coupon",
+      "description": "Discount coupon for sales",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "discount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code", "discount", "createdAt"]
+    },
+    "Integrations": {
+      "title": "Integrations",
+      "description": "Third-party platform integration settings",
+      "type": "object",
+      "properties": {
+        "whatsapp": { "type": "object" },
+        "telegram": { "type": "object" },
+        "instagram": { "type": "object" },
+        "tiktok": { "type": "object" },
+        "mercadopago": { "type": "object" },
+        "picpay": { "type": "object" },
+        "kiwify": { "type": "object" },
+        "kaptur": { "type": "object" },
+        "nubank": { "type": "object" }
+      }
+    },
+    "User": {
+      "title": "User",
+      "description": "User profile data",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "lastLogin": { "type": "string", "format": "date-time" },
+        "role": { "type": "string", "enum": ["admin", "user"] }
+      },
+      "required": ["uid", "email"]
+    },
+    "MemberProduct": {
+      "title": "MemberProduct",
+      "description": "A digital product with modules and lessons",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "thumbnail": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "createdAt"]
+    },
+    "Module": {
+      "title": "Module",
+      "description": "A module within a product",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "order": { "type": "integer" }
+      },
+      "required": ["title", "order"]
+    },
+    "Lesson": {
+      "title": "Lesson",
+      "description": "A lesson within a module",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "type": { "type": "string", "enum": ["video", "pdf", "text", "link"] },
+        "content": { "type": "string" },
+        "videoUrl": { "type": "string" },
+        "pdfUrl": { "type": "string" },
+        "externalLink": { "type": "string" },
+        "order": { "type": "integer" }
+      },
+      "required": ["title", "type", "order"]
+    },
+    "UserAccess": {
+      "title": "UserAccess",
+      "description": "Links a user to a purchased product",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "productId": { "type": "string" },
+        "purchasedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "productId", "purchasedAt"]
+    },
+    "UserProgress": {
+      "title": "UserProgress",
+      "description": "Tracks user progress in a product",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "productId": { "type": "string" },
+        "completedLessons": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["userId", "productId", "completedLessons"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profile" },
+    "/users/{userId}/projects": { "schema": "Project", "description": "User projects" },
+    "/users/{userId}/chats": { "schema": "ChatMessage", "description": "Chat history" },
+    "/users/{userId}/logs": { "schema": "ActivityLog", "description": "Activity logs" },
+    "/users/{userId}/payments": { "schema": "Payment", "description": "User payments" },
+    "/subscriptions/{userId}": { "schema": "Subscription", "description": "User subscription plan" },
+    "/seller_configs/{userId}": { "schema": "SellerConfig", "description": "AI Seller configurations" },
+    "/bot_configs/{userId}": { "schema": "BotConfig", "description": "General bot configurations" },
+    "/integrations/{userId}": { "schema": "Integrations", "description": "Integration settings" },
+    "/users/{userId}/coupons": { "schema": "Coupon", "description": "Discount coupons" },
+    "/member_products/{productId}": { "schema": "MemberProduct", "description": "Global digital products" },
+    "/member_products/{productId}/modules/{moduleId}": { "schema": "Module", "description": "Modules of a product" },
+    "/member_products/{productId}/modules/{moduleId}/lessons/{lessonId}": { "schema": "Lesson", "description": "Lessons of a module" },
+    "/user_access/{userId}/products/{productId}": { "schema": "UserAccess", "description": "Products owned by a user" },
+    "/user_progress/{userId}/products/{productId}": { "schema": "UserProgress", "description": "User's progress in a product" }
+  }
+}
